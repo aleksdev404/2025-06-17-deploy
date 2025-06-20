@@ -1,0 +1,33 @@
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports: ["5432:5432"]
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/postgres
+      INSALES_API_KEY: ${INSALES_API_KEY}
+      INSALES_API_PWD: ${INSALES_API_PWD}
+      INSALES_API_URL: https://myshop-bur39.myinsales.ru/admin
+      INSALES_SHOP:    ${INSALES_SHOP}
+      TG_BOT_TOKEN:    ${TG_BOT_TOKEN}        
+      TG_CHAT_ID:      ${TG_CHAT_ID} 
+      TG_FILM_CHAT_ID: ${TG_FILM_CHAT_ID}
+      TG_CLIENT_CHAT_ID: ${TG_CLIENT_CHAT_ID}     
+    ports: ["8000:8000"]
+    depends_on: [db]
+volumes:
+  postgres_data:

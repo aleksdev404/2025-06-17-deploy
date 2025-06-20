@@ -1,0 +1,9 @@
+# .amvera.yml  --- корень репозитория / архива
+build:
+  dockerfile: Dockerfile     # относительный путь к Dockerfile
+  context: .                 # что считать Build-контекстом
+  destination: registry.amvera.ru/${AMVERA_PROJECT}/${AMVERA_COMMIT_SHA}
+
+run:
+  image: ${build.image}      # использовать только что собранный образ
+  containerPort: 80

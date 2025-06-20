@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Пользователи | Materials Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body class="p-3">
+  <nav class="d-flex justify-content-between align-items-center mb-4">
+      <h4>Управление пользователями</h4>
+      <button id="logout" class="btn btn-outline-secondary btn-sm">Выход</button>
+  </nav>
+
+  <section class="mb-4">
+    <form id="addUser" class="row g-2">
+      <div class="col-auto">
+        <input name="username" class="form-control" placeholder="username" required>
+      </div>
+      <div class="col-auto">
+        <input name="password" class="form-control" placeholder="password" required>
+      </div>
+      <div class="col-auto">
+        <select name="role" class="form-select">
+          <option value="collector">collector</option>
+          <option value="admin">admin</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-success" type="submit">+ Добавить</button>
+      </div>
+    </form>
+  </section>
+
+  <table class="table table-bordered align-middle" id="tbl">
+    <thead class="table-dark">
+      <tr>
+        <th>id</th><th>username</th><th>role</th><th>active</th><th>действия</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+<script>
+requireRole(['admin'])
+
+const tbody = document.querySelector('#tbl tbody')
+
+async function load() {
+  const r = await api('/users')
+  const list = await r.json()
+  tbody.innerHTML = ''
+  for(const u of list){
+    tbody.insertAdjacentHTML('beforeend', `
+     <tr data-id="${u.id}">
+       <td>${u.id.slice(0,8)}</td>
+       <td>${u.username}</td>
+       <td>
+         <select class="form-select form-select-sm roleSel">
+           <option value="admin" ${u.role === 'admin' ? 'selected':''}>admin</option>
+           <option value="collector" ${u.role === 'collector' ? 'selected':''}>collector</option>
+         </select>
+       </td>
+       <td><span class="badge bg-${u.is_active?'success':'secondary'}">${u.is_active?'активен':'заблок.'}</span></td>
+       <td>
+         <button class="btn btn-sm btn-warning toggleBtn">toggle</button>
+       </td>
+     </tr>`)
+  }
+}
+load()
+
+// добавление пользователя
+document.getElementById('addUser').addEventListener('submit', async e=>{
+  e.preventDefault()
+  const fd = new FormData(e.target)
+  const body = Object.fromEntries(fd.entries())
+  const r = await api('/users',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+  if(r.ok){ e.target.reset(); load() }
+  else alert('ошибка '+r.status)
+})
+
+// изменение роли + активность
+tbody.addEventListener('change', async e=>{
+  if(e.target.classList.contains('roleSel')){
+    const tr = e.target.closest('tr'); const id = tr.dataset.id
+    const role = e.target.value
+    await api(`/users/${id}/role?role=${role}`, {method:'PATCH'})
+    load()
+  }
+})
+tbody.addEventListener('click', async e=>{
+  if(e.target.classList.contains('toggleBtn')){
+    const tr = e.target.closest('tr'); const id = tr.dataset.id
+    await api(`/users/${id}/state`, {method:'PATCH'})
+    load()
+  }
+})
+</script>
+<script type="module" src="script.js"></script>
+<script type="module" src="utils.js"></script>
+<script>
+  import { requireRole } from './utils.js';
+  requireRole(['admin']);           
+  /* или */
+  requireRole(['admin','collector']);
+</script>
+</body>
+</html>

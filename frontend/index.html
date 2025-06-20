@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Учёт материалов</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>body{background:#f7f9fc}</style>
+
+  <!-- мгновенный редирект на логин, если токена ещё нет -->
+  <script>if (!localStorage.token) location.href='/login.html';</script>
+</head>
+<body>
+
+<!----- навбар ----->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <span class="navbar-brand">Учёт материалов</span>
+
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item"><a class="nav-link active" href="#" data-page="orders">Заказы</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-page="materials">Материалы / Правила</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-page="stats">Статистика</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-page="users">Пользователи</a></li>
+    </ul>
+
+    <button id="logout" class="btn btn-sm btn-light">Выход</button>
+  </div>
+</nav>
+
+<!----- контент страниц (вкладки) ----->
+<div class="container my-4">
+
+  <!---- Заказы ---->
+  <div id="page-orders" class="page">
+    <div class="d-flex mb-2">
+      <h4 class="me-auto">Список заказов</h4>
+      <button id="btn-import" class="btn btn-success">Импортировать</button>
+    </div>
+    <ul id="orders-list" class="list-group"></ul>
+  </div>
+
+  <!---- Материалы / Правила ---->
+  <div id="page-materials" class="page d-none">
+    <h4>Текущие остатки</h4>
+    <table class="table table-bordered align-middle" id="stock-table">
+      <thead class="table-light"><tr><th>Материал</th><th>Кол-во</th><th>Мин.</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <!---- модалка истории списаний ---->
+    <div class="modal fade" id="histModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">История списаний (50 шт.)</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-0"><ul id="hist-list" class="list-group list-group-flush"></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <h4>Добавить / изменить материал</h4>
+    <div class="input-group mb-3">
+      <input id="mat-name" class="form-control" placeholder="Название">
+      <input id="mat-unit" class="form-control" style="max-width:120px" value="шт">
+      <input id="mat-qty"  class="form-control" style="max-width:140px" type="number" value="0">
+      <button id="mat-add" class="btn btn-success">Сохранить</button>
+    </div>
+    <ul id="materials-list" class="list-group mb-4"></ul>
+
+    <hr>
+
+    <h4>Правила списания</h4>
+    <div class="row g-2 mb-2">
+      <div class="col-6"><input id="rule-pattern" class="form-control" placeholder="Подстрока товара"></div>
+      <div class="col-2"><button id="rule-add-row" class="btn btn-outline-secondary w-100">+ материал</button></div>
+      <div class="col-2"><button id="rule-add"      class="btn btn-primary w-100">Сохранить</button></div>
+    </div>
+    <div id="multi-container" class="mb-3"></div>
+    <ul id="rules-list" class="list-group"></ul>
+  </div>
+
+  <!---- Статистика ---->
+  <div id="page-stats" class="page d-none" style="height:650px;">
+    <div class="mb-3">
+      <label class="form-label me-2">Месяц:</label>
+      <select id="stat-month" class="form-select d-inline-block w-auto">
+        <option value="">всё время</option>
+      </select>
+    </div>
+    <canvas id="chart-day"></canvas>
+  </div>
+  
+  <!---- Пользователи ---->
+  <div id="page-users" class="page d-none">
+    <h4 class="mb-3">Пользователи</h4>
+    <table class="table table-bordered" id="tbl-users">
+      <thead class="table-light"><tr><th>Логин</th><th>Роль</th><th>Активен</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h5 class="mt-4">Новый пользователь</h5>
+    <div class="row g-2">
+      <div class="col-3"><input id="new-user" class="form-control" placeholder="login"></div>
+      <div class="col-3"><input id="new-pass" class="form-control" placeholder="password"></div>
+      <div class="col-3">
+        <select id="new-role" class="form-select">
+          <option value="collector">collector</option>
+          <option value="admin">admin</option>
+        </select>
+      </div>
+      <div class="col-2"><button id="btn-add-user" class="btn btn-success w-100">Добавить</button></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- скрипты -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="utils.js"></script>
+<script type="module" src="script.js"></script>
+</body>
+</html>
