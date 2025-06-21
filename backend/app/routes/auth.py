@@ -13,7 +13,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 class TokenOut(BaseModel):
     access_token: str
-    token_type:   str = "bearer"
+    token_type: str = "bearer"
 
 
 @router.post("/login", response_model=TokenOut)
@@ -28,9 +28,11 @@ def login(
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     return TokenOut(access_token=create_access_token(user.username))
 
+
 class MeOut(BaseModel):
     username: str
-    role:     Role
+    role: Role
+
 
 @router.get("/me", response_model=MeOut)
 def me(user: User = Depends(get_current_user)):

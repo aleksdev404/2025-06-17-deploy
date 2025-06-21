@@ -15,13 +15,13 @@ router = APIRouter(prefix="/users", tags=["users"])
 class UserCreate(BaseModel):
     username: str = Field(..., max_length=48)
     password: str = Field(..., min_length=6)
-    role:     Role  = Role.collector
+    role: Role = Role.collector
 
 
 class UserOut(BaseModel):
-    id:        UUID
-    username:  str
-    role:      Role
+    id: UUID
+    username: str
+    role: Role
     is_active: bool
 
     class Config:

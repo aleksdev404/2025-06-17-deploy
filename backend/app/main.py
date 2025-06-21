@@ -1,4 +1,3 @@
-import os
 import asyncio
 import logging
 from datetime import datetime, timedelta
@@ -12,14 +11,14 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
 from backend.app.database import Base, engine, SessionLocal
-from backend.app.routes.auth      import router as auth_router
-from backend.app.routes.users     import router as users_router
-from backend.app.routes.films     import router as films_router
+from backend.app.routes.auth import router as auth_router
+from backend.app.routes.users import router as users_router
+from backend.app.routes.films import router as films_router
 from backend.app.routes.materials import router as materials_router
-from backend.app.routes.rules     import router as rules_router
-from backend.app.routes.orders    import router as orders_router
-from backend.app.routes.stats     import router as stats_router
-from backend.app.security         import admin_required, get_current_user
+from backend.app.routes.rules import router as rules_router
+from backend.app.routes.orders import router as orders_router
+from backend.app.routes.stats import router as stats_router
+from backend.app.security import admin_required
 from backend.app import crud, telegram, models
 from backend.app.services import insales
 
@@ -50,29 +49,35 @@ app.add_middleware(
 
 # ─────── Routers ───────
 app.include_router(auth_router)                       # /auth/*
-app.include_router(users_router,   prefix="/api")     # /api/users
-app.include_router(films_router,   prefix="/api")     # /api/films
+app.include_router(users_router, prefix="/api")     # /api/users
+app.include_router(films_router, prefix="/api")     # /api/films
 app.include_router(materials_router, prefix="/api")   # /api/materials
 
 admin_deps = [Depends(admin_required)]
-app.include_router(rules_router,  prefix="/api", dependencies=admin_deps)
+app.include_router(rules_router, prefix="/api", dependencies=admin_deps)
 app.include_router(orders_router, prefix="/api", dependencies=admin_deps)
-app.include_router(stats_router,  prefix="/api", dependencies=admin_deps)
+app.include_router(stats_router, prefix="/api", dependencies=admin_deps)
 
 
 # Static files (SPA frontend)
 app.mount("/", StaticFiles(directory="/app/frontend", html=True), name="frontend")
 
 # ─────── Health ───────
+
+
 @app.get("/api/health")
 def health():
     return {"status": "ok"}
 
 # ─────── Utils ───────
+
+
 def cutoff_date() -> datetime:
     return datetime.utcnow() - timedelta(days=365)
 
 # Low-stock alert helper
+
+
 async def check_low_stock(db):
     for m in crud.list_materials(db):
         qty = crud._current_qty(db, m.id)
@@ -89,6 +94,8 @@ READY_ORDER_ID = 109704738
 
 # ─────── Background Fetch Loop ───────
 # ─────── Background Fetch Loop ───────
+
+
 @app.on_event("startup")
 async def fetch_loop():
     async def loop():
@@ -101,9 +108,9 @@ async def fetch_loop():
                     db.query(models.ReadyFilm).delete()
                     for ln in ready.get("order_lines", []):
                         db.add(models.ReadyFilm(
-                            sku      = ln.get("sku"),
-                            title    = ln.get("title"),
-                            quantity = ln.get("quantity", 0),
+                            sku=ln.get("sku"),
+                            title=ln.get("title"),
+                            quantity=ln.get("quantity", 0),
                         ))
                     db.commit()
 
@@ -119,9 +126,11 @@ async def fetch_loop():
                     db_order = crud.upsert_order(db, o)
 
                     # 1) Уведомление о «клиентском» заказе
-                    if (o.custom_status
-                        and o.custom_status.permalink == "novyy"
-                        and not db_order.client_notified):
+                    if (
+                        o.custom_status
+                            and o.custom_status.permalink == "novyy"
+                            and not db_order.client_notified
+                    ):
                         logger.info("Пойман клиентский заказ %s, шлём уведомление", o.number)
                         await telegram.send(f"📞 Новый клиентский заказ #{o.number}")
                         db_order.client_notified = True

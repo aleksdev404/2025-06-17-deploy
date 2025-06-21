@@ -1,7 +1,7 @@
 # backend/app/crud.py
 from __future__ import annotations
 
-import anyio  
+import anyio
 import asyncio
 from typing import List
 
@@ -17,6 +17,8 @@ pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # ---------------------------------------------------------------------
 # helpers
 # ---------------------------------------------------------------------
+
+
 def set_user_password(db: Session, user: models.User, raw_password: str) -> None:
     user.hashed_password = pwd_ctx.hash(raw_password)
     db.commit()
@@ -252,7 +254,6 @@ def import_orders(db: Session, limit: int = 50) -> int:
     for o in orders:
         upsert_order(db, o)
     return len(orders)
-
 
 
 def update_min_qty(db: Session, material_id: int, new_min: float) -> None:

@@ -4,11 +4,11 @@ import logging
 import asyncio
 from typing import List, Union
 
-TOKEN       = os.getenv("TG_BOT_TOKEN")
-STOCK_CHAT  = os.getenv("TG_CHAT_ID")                          # общий чат для остатков и пингов
-FILM_CHAT   = os.getenv("TG_FILM_CHAT_ID")      # чат для плёнок
+TOKEN = os.getenv("TG_BOT_TOKEN")
+STOCK_CHAT = os.getenv("TG_CHAT_ID")                          # общий чат для остатков и пингов
+FILM_CHAT = os.getenv("TG_FILM_CHAT_ID")      # чат для плёнок
 CLIENT_CHAT = os.getenv("TG_CLIENT_CHAT_ID")    # чат для клиентских заказов
-log         = logging.getLogger("tg")
+log = logging.getLogger("tg")
 
 
 async def _post(text: str, chat_id: str):

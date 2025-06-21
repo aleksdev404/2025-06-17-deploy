@@ -1,20 +1,22 @@
 import os
 import datetime
-import httpx, asyncio
-from typing import List, Union
+import httpx
+import asyncio
+from typing import Union
 
 from backend.app import schemas
 
 INSALES_API_KEY = os.getenv("INSALES_API_KEY")
 INSALES_API_PWD = os.getenv("INSALES_API_PWD")
-INSALES_SHOP    = os.getenv("INSALES_SHOP")
+INSALES_SHOP = os.getenv("INSALES_SHOP")
 INSALES_API_URL = os.getenv("INSALES_API_URL") or f"https://{INSALES_SHOP}/admin"
 
-TIMEOUT   = httpx.Timeout(  # ⬅️  все четыре параметра!
-    connect=5.0,  read=40.0,  write=10.0,  pool=5.0
+TIMEOUT = httpx.Timeout(  # ⬅️  все четыре параметра!
+    connect=5.0, read=40.0, write=10.0, pool=5.0
 )
-RETRIES   = 3         # сколько раз пробуем
+RETRIES = 3         # сколько раз пробуем
 RETRY_PAUSE = 3       # секунд между попытками
+
 
 async def fetch_orders(limit: int = 50) -> list[schemas.OrderOut]:
     """
@@ -32,7 +34,7 @@ async def fetch_orders(limit: int = 50) -> list[schemas.OrderOut]:
                 data = resp.json()
             break                                           # успех
         except (httpx.ConnectTimeout, httpx.ReadTimeout) as e:
-            last_exc = e
+            last_exc = e  # noqa
             if attempt < RETRIES:
                 await asyncio.sleep(RETRY_PAUSE)
                 continue
@@ -44,11 +46,11 @@ async def fetch_orders(limit: int = 50) -> list[schemas.OrderOut]:
         # 1) собираем линии
         lines = [
             schemas.OrderLine(
-                product_id    = l["product_id"],
-                product_title = l["title"],
-                quantity      = l["quantity"],
+                product_id=line["product_id"],
+                product_title=line["title"],
+                quantity=line["quantity"],
             )
-            for l in it.get("order_lines", [])
+            for line in it.get("order_lines", [])
         ]
         # 2) парсим дату
         created = datetime.datetime.fromisoformat(
@@ -59,15 +61,15 @@ async def fetch_orders(limit: int = 50) -> list[schemas.OrderOut]:
 
         out.append(
             schemas.OrderOut(
-                id               = it["id"],
-                number           = it["number"],
-                customer         = (it.get("client") or {}).get("full_name"),
-                created_at       = created,
-                ignored          = it.get("ignored", False),
-                ready_notified   = False,
-                client_notified  = False,
-                custom_status    = cs,
-                lines            = lines,
+                id=it["id"],
+                number=it["number"],
+                customer=(it.get("client") or {}).get("full_name"),
+                created_at=created,
+                ignored=it.get("ignored", False),
+                ready_notified=False,
+                client_notified=False,
+                custom_status=cs,
+                lines=lines,
             )
         )
     return out

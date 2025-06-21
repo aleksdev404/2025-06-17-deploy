@@ -8,11 +8,12 @@ from pydantic import BaseModel, field_validator
 # ---------- MATERIALS ----------
 class CustomStatus(BaseModel):
     permalink: str
-    title:     str
+    title: str
 
     model_config = {
         "from_attributes": True
     }
+
 
 class MaterialBase(BaseModel):
     name: str
@@ -77,15 +78,15 @@ class OrderLine(BaseModel):
 # ---------- ORDERS ----------
 
 class OrderOut(BaseModel):
-    id:              int
-    number:          str
-    customer:        Optional[str]         = None
-    created_at:      datetime
-    ignored:         bool                  = False
-    ready_notified:  bool                  = False
-    client_notified: bool                  = False
-    custom_status:   Optional[CustomStatus]= None
-    lines:           List[OrderLine]       = []
+    id: int
+    number: str
+    customer: Optional[str] = None
+    created_at: datetime
+    ignored: bool = False
+    ready_notified: bool = False
+    client_notified: bool = False
+    custom_status: Optional[CustomStatus] = None
+    lines: List[OrderLine] = []
 
     @field_validator("number", mode="before")
     @classmethod

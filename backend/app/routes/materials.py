@@ -14,12 +14,12 @@ router = APIRouter(prefix="/materials", tags=["Материалы"])
 # ------------------------------------------------
 # Pydantic-модель для истории списаний
 class MaterialHistory(BaseModel):
-    order_id:        Optional[int]
-    order_number:    Optional[str]
-    qty:             float
-    dt:              datetime
+    order_id: Optional[int]
+    order_number: Optional[str]
+    qty: float
+    dt: datetime
 
-    model_config = { "from_attributes": True }
+    model_config = {"from_attributes": True}
 # ------------------------------------------------
 
 
@@ -114,11 +114,11 @@ def history(
     out: List[MaterialHistory] = []
     for mv, ord_num in q:
         out.append(MaterialHistory(
-            order_id     = mv.order_id,
+            order_id=mv.order_id,
             # приводим номер к строке, если он есть
-            order_number = str(ord_num) if ord_num is not None else None,
-            qty           = mv.qty,
-            dt            = mv.created_at,
+            order_number=str(ord_num) if ord_num is not None else None,
+            qty=mv.qty,
+            dt=mv.created_at,
         ))
     return out
 
@@ -131,5 +131,3 @@ def history(
 def adjust(mid: int, delta: float, db: Session = Depends(get_db)):
     crud.add_adjustment(db, mid, delta)
     return {"ok": True}
-
-
