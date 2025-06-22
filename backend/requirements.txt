@@ -9,3 +9,4 @@ bcrypt==3.2.2
 python-jose[cryptography]==3.3.0
 slowapi==0.1.6
 python-multipart==0.0.9
+typer[all]
