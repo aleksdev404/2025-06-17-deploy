@@ -8,3 +8,5 @@ docker compose exec backend python -m backend.app.manage -u <имя пользо
 Как кидать авторизованные запросы? (postman etc.)
 
 - Нужно передавать header "Authorization: Bearer <токен>" в запросе.
+
+// для обновления amvera
