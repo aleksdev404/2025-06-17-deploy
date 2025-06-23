@@ -1,4 +1,10 @@
+FAQ.
+
 Как создать пользователя?
 
-Для этого нужно будет запустить docker и ввести команду:
+- Для этого нужно будет запустить docker и ввести команду:
 docker compose exec backend python -m backend.app.manage -u <имя пользователя> -p <пароль>
+
+Как кидать авторизованные запросы? (postman etc.)
+
+- Нужно передавать header "Authorization: Bearer <токен>" в запросе.

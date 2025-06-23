@@ -116,7 +116,29 @@ async def fetch_loop():
 
                 ready_titles = {f.title for f in db.query(models.ReadyFilm)}
 
+                # ——— для теста ———
+                # ВСТАВЬ В НАЧАЛЕ ЦИКЛА
+                # class FakeStatus:
+                #     permalink = "novyy"
+
+                # class FakeOrderLine:
+                #     product_title = "Фейковый продукт"
+                #     product_id = 1111
+                #     quantity = 11
+
+                # class FakeOrder:
+                #     id = 999999
+                #     created_at = '2025-06-22T23:31:27'
+                #     customer = 'Aleksdev'
+                #     ignored = False
+                #     number = 999999
+                #     custom_status = FakeStatus()
+                #     lines = [FakeOrderLine()]
+                #     source = "Тест"
+
                 # ——— последние заказы ———
+                # orders = [FakeOrder()]
+
                 orders = await insales.fetch_orders(50)
                 for o in orders:
                     if str(o.number) == str(READY_ORDER_ID):
@@ -132,7 +154,7 @@ async def fetch_loop():
                             and not db_order.client_notified
                     ):
                         logger.info("Пойман клиентский заказ %s, шлём уведомление", o.number)
-                        await telegram.send(f"📞 Новый клиентский заказ #{o.number}")
+                        await telegram.send(f"📞 Новый клиентский заказ #{o.number} от {o.customer}")
                         db_order.client_notified = True
                         db.commit()
 
