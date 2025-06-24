@@ -154,7 +154,7 @@ async def fetch_loop():
                             and not db_order.client_notified
                     ):
                         logger.info("Пойман клиентский заказ %s, шлём уведомление", o.number)
-                        await telegram.send(f"📞 Новый клиентский заказ #{o.number} от {o.customer}")
+                        await telegram.send(f"📞 Новый клиентский заказ #{o.number} от {o.customer} на сумму {o.total_price}")
                         db_order.client_notified = True
                         db.commit()
 

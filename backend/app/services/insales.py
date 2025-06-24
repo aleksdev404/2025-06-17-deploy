@@ -70,6 +70,7 @@ async def fetch_orders(limit: int = 50) -> list[schemas.OrderOut]:
                 client_notified=False,
                 custom_status=cs,
                 lines=lines,
+                total_price=it.get("total_price", 0)
             )
         )
     return out

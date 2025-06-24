@@ -87,6 +87,7 @@ class OrderOut(BaseModel):
     client_notified: bool = False
     custom_status: Optional[CustomStatus] = None
     lines: List[OrderLine] = []
+    total_price: float
 
     @field_validator("number", mode="before")
     @classmethod
