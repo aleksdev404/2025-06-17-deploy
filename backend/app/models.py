@@ -73,6 +73,7 @@ class Order(Base):
     ignored = Column(Boolean, default=False, nullable=False)
     ready_notified = Column(Boolean, default=False, nullable=False)  # уведомление о готовых плёнках отправлено?
     client_notified = Column(Boolean, default=False, nullable=False)
+    total_price = Column(Integer, nullable=False)
 
     lines = relationship("OrderLine", back_populates="order", cascade="all, delete-orphan")
 

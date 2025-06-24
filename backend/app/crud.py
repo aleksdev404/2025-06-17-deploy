@@ -189,12 +189,14 @@ def upsert_order(db: Session, data: schemas.OrderOut) -> models.Order:
             id=data.id,
             number=data.number,
             created_at=data.created_at,
+            total_price=data.total_price
         )
         db.add(order)
     # всегда обновляем изменяемые поля:
     order.customer = f"{data.surname} {data.name}".strip() if hasattr(data, "surname") else data.customer
     order.created_at = data.created_at
     order.ignored = data.ignored
+    order.total_price = data.total_price
     db.commit()
 
     # replace order lines
