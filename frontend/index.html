@@ -105,17 +105,19 @@
     </table>
 
     <h5 class="mt-4">Новый пользователь</h5>
-    <div class="row g-2">
-      <div class="col-3"><input id="new-user" class="form-control" placeholder="login"></div>
-      <div class="col-3"><input id="new-pass" class="form-control" placeholder="password"></div>
-      <div class="col-3">
-        <select id="new-role" class="form-select">
-          <option value="collector">collector</option>
-          <option value="admin">admin</option>
-        </select>
+    <form id="addUser">
+      <div class="row g-2">
+        <div class="col-3"><input name="username" id="new-user" class="form-control" placeholder="login"></div>
+        <div class="col-3"><input name="password" id="new-pass" class="form-control" placeholder="password"></div>
+        <div class="col-3">
+          <select name="role" id="new-role" class="form-select">
+            <option value="collector">collector</option>
+            <option value="admin">admin</option>
+          </select>
+        </div>
+        <div class="col-2"><button id="btn-add-user" class="btn btn-success w-100">Добавить</button></div>
       </div>
-      <div class="col-2"><button id="btn-add-user" class="btn btn-success w-100">Добавить</button></div>
-    </div>
+    </form>
   </div>
 
 </div><!-- /container -->
@@ -125,5 +127,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="utils.js"></script>
 <script type="module" src="script.js"></script>
+<script type="module" src="users.js"></script>
 </body>
 </html>
