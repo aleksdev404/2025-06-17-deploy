@@ -19,4 +19,4 @@ COPY frontend /app/frontend
 EXPOSE 8000
 
 # 4. Запуск
-CMD [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000", "--reload-dir", "/app/backend", "--reload-dir", "/app/frontend"]
+CMD [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000", "--reload-dir", "../../backend", "--reload-dir", "../../frontend", "--reload-include", "*.html", "--reload-include", "*.css", "--reload-include", "*.js"]
