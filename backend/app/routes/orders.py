@@ -3,10 +3,11 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from ..database import get_db
-from ..security import admin_required
-from .. import crud, schemas
-from ..services.insales import fetch_orders
+from database import get_db
+from security import admin_required
+import crud
+import schemas
+from services.insales import fetch_orders
 
 from httpx import HTTPError, ConnectTimeout, ReadTimeout
 from fastapi import HTTPException

@@ -9,8 +9,10 @@ from passlib.context import CryptContext
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from backend.app import models, schemas, telegram
-from backend.app.services.insales import fetch_orders
+import models
+import schemas
+import telegram
+from services.insales import fetch_orders
 
 pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

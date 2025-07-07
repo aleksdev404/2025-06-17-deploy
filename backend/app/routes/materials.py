@@ -4,9 +4,11 @@ from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
 
-from ..database import get_db
-from ..security import get_current_user, admin_required
-from .. import crud, models, schemas
+from database import get_db
+from security import get_current_user, admin_required
+import crud
+import models
+import schemas
 
 router = APIRouter(prefix="/materials", tags=["Материалы"])
 

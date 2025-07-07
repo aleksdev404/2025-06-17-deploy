@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from datetime import date, datetime, timedelta
-from backend.app.database import get_db
-from backend.app import models
+from database import get_db
+import models
 
 router = APIRouter(prefix="/stats", tags=["Статистика"])
 

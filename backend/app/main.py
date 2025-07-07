@@ -10,17 +10,19 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-from backend.app.database import Base, engine, SessionLocal
-from backend.app.routes.auth import router as auth_router
-from backend.app.routes.users import router as users_router
-from backend.app.routes.films import router as films_router
-from backend.app.routes.materials import router as materials_router
-from backend.app.routes.rules import router as rules_router
-from backend.app.routes.orders import router as orders_router
-from backend.app.routes.stats import router as stats_router
-from backend.app.security import admin_required
-from backend.app import crud, telegram, models
-from backend.app.services import insales
+from database import Base, engine, SessionLocal
+from routes.auth import router as auth_router
+from routes.users import router as users_router
+from routes.films import router as films_router
+from routes.materials import router as materials_router
+from routes.rules import router as rules_router
+from routes.orders import router as orders_router
+from routes.stats import router as stats_router
+from security import admin_required
+import crud
+import telegram
+import models
+from services import insales
 
 
 # ─────── Logging ───────

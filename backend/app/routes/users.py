@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from uuid import UUID
 
-from ..database import get_db
-from ..models import User, Role
-from ..security import hash_password, admin_required
+from database import get_db
+from models import User, Role
+from security import hash_password, admin_required
 
 router = APIRouter(prefix="/users", tags=["users"])
 

@@ -4,7 +4,7 @@ import httpx
 import asyncio
 from typing import Union
 
-from backend.app import schemas
+import schemas
 
 INSALES_API_KEY = os.getenv("INSALES_API_KEY")
 INSALES_API_PWD = os.getenv("INSALES_API_PWD")

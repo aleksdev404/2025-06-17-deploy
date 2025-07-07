@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import Union
-from backend.app.database import get_db
-from backend.app import crud, schemas
+from database import get_db
+import crud
+import schemas
 
 router = APIRouter(prefix="/rules", tags=["Правила"])
 

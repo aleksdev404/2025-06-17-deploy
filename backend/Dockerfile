@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-WORKDIR /app
+WORKDIR /app/backend/app
 
 # 2. Установка зависимостей
 COPY backend/requirements.txt .
@@ -19,4 +19,4 @@ COPY frontend /app/frontend
 EXPOSE 8000
 
 # 4. Запуск
-CMD [ "uvicorn", "backend.app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000", "--reload-dir", "/app/backend", "--reload-dir", "/app/frontend"]
+CMD [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000", "--reload-dir", "/app/backend", "--reload-dir", "/app/frontend"]
