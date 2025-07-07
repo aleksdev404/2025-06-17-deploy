@@ -1,9 +1,9 @@
 # backend/app/manage.py
 
 import typer
-from .database import SessionLocal
-from .models import User, Role
-from .security import hash_password
+from database import SessionLocal
+from models import User, Role
+from security import hash_password
 from datetime import datetime
 import uuid
 
