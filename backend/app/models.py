@@ -11,7 +11,7 @@ from sqlalchemy import (
     Integer,
     BigInteger,
     String,
-    Float,
+    Float
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -48,6 +48,7 @@ class Material(Base):
     base_qty = Column(Float, default=0.0, nullable=False)
     min_qty = Column(Float, default=0.0, nullable=False)
     alerted = Column(Boolean, default=False, nullable=False)  # уже слали TG-уведомление
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
 
 class MaterialRule(Base):

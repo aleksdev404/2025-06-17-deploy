@@ -6,7 +6,7 @@ import asyncio
 from typing import List
 
 from passlib.context import CryptContext
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 
 import models
@@ -46,7 +46,7 @@ def _current_qty(db: Session, material_id: int) -> float:
 # materials
 # ---------------------------------------------------------------------
 def list_materials(db: Session) -> List[models.Material]:
-    return db.query(models.Material).all()
+    return db.query(models.Material).order_by(desc(models.Material.created_at)).all()
 
 
 def create_or_add_material(db: Session, data: schemas.MaterialCreate) -> models.Material:
@@ -195,7 +195,7 @@ def upsert_order(db: Session, data: schemas.OrderOut) -> models.Order:
         )
         db.add(order)
     # всегда обновляем изменяемые поля:
-    order.customer = f"{data.surname} {data.name}".strip() if hasattr(data, "surname") else data.customer
+    order.customer = f"{data.full_name}".strip() if hasattr(data, "full_name") else ''
     order.created_at = data.created_at
     order.ignored = data.ignored
     order.total_price = data.total_price

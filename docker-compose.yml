@@ -27,6 +27,8 @@ services:
       TG_CHAT_ID:      ${TG_CHAT_ID} 
       TG_FILM_CHAT_ID: ${TG_FILM_CHAT_ID}
       TG_CLIENT_CHAT_ID: ${TG_CLIENT_CHAT_ID}     
+      TZ: Europe/Moscow
+      PGTZ: Europe/Moscow
     ports: ["8000:8000"]
     depends_on: [db]
 volumes:
