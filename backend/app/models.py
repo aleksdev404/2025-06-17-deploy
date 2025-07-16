@@ -15,6 +15,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from database import Base
 
@@ -34,7 +35,7 @@ class User(Base):
     hashed_password = Column(String(128), nullable=False)
     role = Column(Enum(Role), default=Role.collector, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
 # ---------- Materials & Rules ----------
@@ -48,7 +49,7 @@ class Material(Base):
     base_qty = Column(Float, default=0.0, nullable=False)
     min_qty = Column(Float, default=0.0, nullable=False)
     alerted = Column(Boolean, default=False, nullable=False)  # уже слали TG-уведомление
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
 class MaterialRule(Base):
@@ -70,7 +71,7 @@ class Order(Base):
     id = Column(Integer, primary_key=True)
     number = Column(String, index=True, nullable=False)
     customer = Column(String)
-    created_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     ignored = Column(Boolean, default=False, nullable=False)
     ready_notified = Column(Boolean, default=False, nullable=False)  # уведомление о готовых плёнках отправлено?
     client_notified = Column(Boolean, default=False, nullable=False)
@@ -101,7 +102,7 @@ class StockMovement(Base):
     material_id = Column(Integer, ForeignKey("materials.id"), nullable=False)
     order_id = Column(BigInteger, ForeignKey("orders.id"), nullable=True)
     qty = Column(Float, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
 # ---------- Ready Films (склад готовых плёнок) ----------
